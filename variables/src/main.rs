@@ -8,4 +8,10 @@ fn main() {
     }
 
     println!("The value of x is: {x}");
+
+    // Shadowing
+    let spaces = "   ";
+    let spaces = spaces.len();
+
+    println!("There are {spaces} spaces!");
 }
