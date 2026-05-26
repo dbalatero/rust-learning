@@ -10,7 +10,7 @@ fn main() {
         Some(arg) => match arg.parse() {
             Ok(n) => n,
             Err(_) => {
-                eprintln!("Error: expected a positive 64-bit integer, got {arg:?}");
+                eprintln!("Error: expected an unsigned 64-bit integer, got {arg:?}");
                 std::process::exit(1);
             }
         },
