@@ -1,9 +1,26 @@
 use std::env;
 
+const MAX_N: u64 = 93;
+const DEFAULT_N: u64 = 10;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let n: u32 = args.get(1).and_then(|arg| arg.parse().ok()).unwrap_or(10);
+    let n: u64 = match args.get(1) {
+        Some(arg) => match arg.parse() {
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("Error: expected a positive 64-bit integer, got {arg:?}");
+                std::process::exit(1);
+            }
+        },
+        None => DEFAULT_N,
+    };
+
+    if n > MAX_N {
+        eprintln!("Error: fibonacci number {n} is too large. Max supported value is {MAX_N}.");
+        std::process::exit(1);
+    }
 
     println!("Calculating fibonacci number {n}...");
 
@@ -12,7 +29,7 @@ fn main() {
     println!("Got result = {result}");
 }
 
-fn fib(n: u32) -> u32 {
+fn fib(n: u64) -> u64 {
     match n {
         0 => 0,
         1 => 1,
@@ -54,5 +71,15 @@ mod tests {
     #[test]
     fn fib_larger() {
         assert_eq!(fib(20), 6765);
+    }
+
+    #[test]
+    fn fib_larger_than_32_bytes() {
+        assert_eq!(fib(48), 4807526976);
+    }
+
+    #[test]
+    fn fib_max_u64_input() {
+        assert_eq!(fib(MAX_N), 12200160415121876738);
     }
 }
